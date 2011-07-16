@@ -1,0 +1,6 @@
+django
+django-model-utils
+django-categories
+django-taggit
+
+markdown
