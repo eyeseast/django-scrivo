@@ -11,6 +11,7 @@ from revisions.shortcuts import TrashableVersionedModel
 from taggit.managers import TaggableManager
 
 from scrivo.managers import PostQuerySet
+from scrivo.utils import get_post_base
 
 class PostBase(TimeStampedModel):
     """
@@ -66,9 +67,18 @@ class PostBase(TimeStampedModel):
         if not self.slug:
             self.slug = slugify(self.title or self.id)
         super(PostBase, self).save(*args, **kwargs)
-    
 
-class Post(PostBase, TrashableVersionedModel):
+
+class VersionedPostBase(PostBase, TrashableVersionedModel):
+    """
+    A Post ancestor that includes version control and delete safety
+    """
+    
+    class Meta(PostBase.Meta):
+        abstract = True
+
+
+class Post(get_post_base()):
     """
     A basic blog post:
      - tags provided by django-taggit
@@ -76,4 +86,7 @@ class Post(PostBase, TrashableVersionedModel):
     """
     allow_comments = models.BooleanField(default=True)
     tags = TaggableManager(blank=True)
+    
+    def get_absolute_url(self):
+        pass
 
