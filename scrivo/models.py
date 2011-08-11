@@ -10,7 +10,7 @@ from model_utils.models import TimeStampedModel
 from revisions.shortcuts import TrashableVersionedModel
 from taggit.managers import TaggableManager
 
-from blogit.managers import PostQuerySet
+from scrivo.managers import PostQuerySet
 
 class PostBase(TimeStampedModel):
     """

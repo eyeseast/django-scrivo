@@ -1,5 +1,5 @@
 from django.contrib import admin
-from blogit.models import Post
+from scrivo.models import Post
 
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
