@@ -45,13 +45,14 @@ class PostBase(TimeStampedModel):
     slug = models.SlugField(max_length=255)
     excerpt = models.TextField(blank=True,
         help_text="Add a manual excerpt")
-    body = SplitField(blank=True)
+    content = SplitField(blank=True)
     
     # manager
     objects = PassThroughManager(PostQuerySet)
     
     class Meta:
         abstract = True
+        get_latest_by = "published"
         ordering = ('-published', '-created')
     
     def __unicode__(self):
@@ -87,6 +88,10 @@ class Post(get_post_base()):
     allow_comments = models.BooleanField(default=True)
     tags = TaggableManager(blank=True)
     
+    @models.permalink
     def get_absolute_url(self):
-        pass
+        return ('scrivo_post_detail', None, {'year': self.published.strftime('%Y'),
+                                             'month': self.published.strftime('%b').lower(),
+                                             'day': self.published.stftime('%d'),
+                                             'slug': self.slug})
 
