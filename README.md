@@ -3,7 +3,7 @@ Django Scrivo
 
 Scrivo is a simple, pluggable blog engine that can be dropped into a larger Django project.
 
-Scrivo is not a WordPress clone, not is it meant to be your whole site. If your site *is* a blog, use WordPress (or one of the many Django-powered alternatives, if that's your thing). If you want your site to *have* a blog, drop in Scrivo and you should be good to go.
+Scrivo is not a WordPress clone, nor is it meant to be your whole site. If your site *is* a blog, use WordPress (or one of the many Django-powered alternatives, if that's your thing). If you want your site to *have* a blog, drop in Scrivo and you should be good to go.
 
 Quick Start
 ------------
