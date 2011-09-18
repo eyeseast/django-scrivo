@@ -48,8 +48,8 @@ class PostBase(TimeStampedModel):
     tags = TaggableManager(blank=True)
     
     # manager
+    versions = LatestManager()
     objects = PassThroughManager(PostQuerySet)
-    revisions = LatestManager()
     
     class Meta:
         abstract = True
