@@ -1,3 +1,4 @@
+import datetime
 from django.test import TestCase
 
 from django.contrib.auth.models import User
@@ -24,3 +25,14 @@ class BlogPostTest(TestCase):
         Ensure a post has a slug, and that it's the slugified title
         """
         self.assertEqual(self.post.slug, slugify(self.post.title))
+    
+    def test_publish(self):
+        """
+        Ensure publishing a post sets the right date
+        """
+        self.post.publish()
+        self.assertEqual(self.post.status, Post.STATUS.public)
+        self.assertEqual(
+             self.post.published.date(), 
+             datetime.datetime.now().date()
+        )

@@ -24,10 +24,6 @@ class PostBase(TimeStampedModel):
     
     By default, it uses an InheritanceManager, allowing subclasses
     to be included in a queryset.
-    
-    Taxonomies (such as tags and categories) are deliberately excluded
-    from the base class to allow more control over how this blog
-    fits into a larger site.
     """
     STATUS = Choices(
         ('draft', 'Draft'),
@@ -48,6 +44,9 @@ class PostBase(TimeStampedModel):
         help_text="Add a manual excerpt")
     content = SplitField(blank=True)
     
+    allow_comments = models.BooleanField(default=True)
+    tags = TaggableManager(blank=True)
+    
     # manager
     objects = PassThroughManager(PostQuerySet)
     revisions = LatestManager()
@@ -60,11 +59,18 @@ class PostBase(TimeStampedModel):
     def __unicode__(self):
         return self.title
     
-    def publish(self):
+    @models.permalink
+    def get_absolute_url(self):
+        return ('scrivo_post_detail', None, {'year': self.published.strftime('%Y'),
+                                             'month': self.published.strftime('%b').lower(),
+                                             'day': self.published.stftime('%d'),
+                                             'slug': self.slug})
+    
+    def publish(self, *args, **kwargs):
         if not self.published:
             self.published = datetime.datetime.now()
         self.status = self.STATUS.public
-        self.save()
+        self.save(*args, **kwargs)
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -83,17 +89,7 @@ class VersionedPostBase(PostBase, TrashableVersionedModel):
 
 class Post(get_post_base()):
     """
-    A basic blog post:
-     - tags provided by django-taggit
-     - versioning provided by django-revisions
+    A basic blog post. Set a custom parent class to change
+    available attributes.
     """
-    allow_comments = models.BooleanField(default=True)
-    tags = TaggableManager(blank=True)
-    
-    @models.permalink
-    def get_absolute_url(self):
-        return ('scrivo_post_detail', None, {'year': self.published.strftime('%Y'),
-                                             'month': self.published.strftime('%b').lower(),
-                                             'day': self.published.stftime('%d'),
-                                             'slug': self.slug})
 
