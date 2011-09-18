@@ -8,6 +8,7 @@ from model_utils.fields import MonitorField, SplitField, StatusField
 from model_utils.managers import PassThroughManager
 from model_utils.models import TimeStampedModel
 from revisions.shortcuts import TrashableVersionedModel
+from revisions.managers import LatestManager
 from taggit.managers import TaggableManager
 
 from scrivo.managers import PostQuerySet
@@ -49,6 +50,7 @@ class PostBase(TimeStampedModel):
     
     # manager
     objects = PassThroughManager(PostQuerySet)
+    revisions = LatestManager()
     
     class Meta:
         abstract = True
@@ -66,7 +68,7 @@ class PostBase(TimeStampedModel):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title or self.id)
+            self.slug = slugify(self.title)
         super(PostBase, self).save(*args, **kwargs)
 
 
