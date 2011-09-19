@@ -1,5 +1,6 @@
 from django.views.generic import dates
 from scrivo.models import Post
+from scrivo.settings import DEFAULT_PAGINATE_BY, INDEX_POST_COUNT
 
 class PostArchiveMixin(object):
     """
@@ -7,13 +8,13 @@ class PostArchiveMixin(object):
     """
     date_field = "published"
     queryset = Post.objects.public()
-    
+    paginate_by = DEFAULT_PAGINATE_BY
 
 class PostArchive(PostArchiveMixin, dates.ArchiveIndexView):
-    pass
+    paginate_by = INDEX_POST_COUNT
 
 class PostYearArchive(PostArchiveMixin, dates.YearArchiveView):
-    pass
+    make_object_list = True
 
 class PostMonthArchive(PostArchiveMixin, dates.MonthArchiveView):
     pass
