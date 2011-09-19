@@ -48,8 +48,8 @@ class PostBase(TimeStampedModel):
     tags = TaggableManager(blank=True)
     
     # manager
-    versions = LatestManager()
     objects = PassThroughManager(PostQuerySet)
+    versions = LatestManager()
     
     class Meta:
         abstract = True
@@ -63,7 +63,7 @@ class PostBase(TimeStampedModel):
     def get_absolute_url(self):
         return ('scrivo_post_detail', None, {'year': self.published.strftime('%Y'),
                                              'month': self.published.strftime('%b').lower(),
-                                             'day': self.published.stftime('%d'),
+                                             'day': self.published.strftime('%d'),
                                              'slug': self.slug})
     
     def publish(self, *args, **kwargs):
