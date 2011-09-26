@@ -15,6 +15,7 @@ class PostViewTest(BlogPostTest):
         
         self.user = self.create_user()
         # let's make 100 fake posts
+        self.date_range = []
         date = datetime.datetime(2011, 1, 1)
         for i in range(100):
             self.create_post(
@@ -25,6 +26,7 @@ class PostViewTest(BlogPostTest):
             )
             
             # incriment the date
+            self.date_range.append(date)
             date += datetime.timedelta(days=1)
     
     def test_archive_index(self):
@@ -81,5 +83,16 @@ class PostViewTest(BlogPostTest):
         
         # since we're doing one post per day
         self.assertEqual(len(posts), 1)
-        
+    
+    def test_post_details(self):
+        """
+        Loop through posts and test that we have a valid view
+        for each day, and that everything works. Since every post
+        should be public, we should be able to use Post.objects.all()
+        """
+        for post in Post.objects.all():
+            response = self.client.get(post.get_absolute_url())
+            self.assertEqual(response.status_code, 200)
+            
+            self.assertEqual(post, response.context.get('post'))
         
