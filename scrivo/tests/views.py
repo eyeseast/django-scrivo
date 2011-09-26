@@ -46,7 +46,15 @@ class PostViewTest(BlogPostTest):
         if not posts:
             self.fail("No posts in context")
         
+        paginator = response.context.get('paginator')
+        if not paginator:
+            self.fail("Not paginated")
+        
+        # check that we're paginating right
         self.assertEqual(posts.count(), DEFAULT_PAGINATE_BY)
+        
+        # and that we have the right total
+        self.assertEqual(paginator.count, 100)
     
     def test_month_archive(self):
         response = self.client.get(reverse('scrivo_month_archive', args=[2011, 'jan']))
@@ -56,7 +64,12 @@ class PostViewTest(BlogPostTest):
         if not posts:
             self.fail("No posts in context")
         
+        paginator = response.context.get('paginator')
+        if not paginator:
+            self.fail("Not paginated")
+    
         self.assertEqual(len(posts), DEFAULT_PAGINATE_BY)
+        self.assertEqual(paginator.count, 31) # for january
     
     def test_day_archive(self):
         response = self.client.get(reverse('scrivo_day_archive', args=[2011, 'jan', 5]))
