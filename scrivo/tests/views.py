@@ -33,7 +33,7 @@ class PostViewTest(BlogPostTest):
         response = self.client.get(reverse('scrivo_archive_index'))
         self.assertEqual(response.status_code, 200)
         
-        posts = response.context.get('object_list')
+        posts = response.context['object_list']
         if not posts:
             self.fail("No posts in context")
         
@@ -44,11 +44,11 @@ class PostViewTest(BlogPostTest):
         response = self.client.get(reverse('scrivo_year_archive', args=[2011]))
         self.assertEqual(response.status_code, 200)
         
-        posts = response.context.get('object_list')
+        posts = response.context['object_list']
         if not posts:
             self.fail("No posts in context")
         
-        paginator = response.context.get('paginator')
+        paginator = response.context['paginator']
         if not paginator:
             self.fail("Not paginated")
         
@@ -62,11 +62,11 @@ class PostViewTest(BlogPostTest):
         response = self.client.get(reverse('scrivo_month_archive', args=[2011, 'jan']))
         self.assertEqual(response.status_code, 200)
         
-        posts = response.context.get('object_list')
+        posts = response.context['object_list']
         if not posts:
             self.fail("No posts in context")
         
-        paginator = response.context.get('paginator')
+        paginator = response.context['paginator']
         if not paginator:
             self.fail("Not paginated")
     
@@ -77,7 +77,7 @@ class PostViewTest(BlogPostTest):
         response = self.client.get(reverse('scrivo_day_archive', args=[2011, 'jan', 5]))
         self.assertEqual(response.status_code, 200)
         
-        posts = response.context.get('object_list')
+        posts = response.context['object_list']
         if not posts:
             self.fail("No posts in context")
         
@@ -94,5 +94,5 @@ class PostViewTest(BlogPostTest):
             response = self.client.get(post.get_absolute_url())
             self.assertEqual(response.status_code, 200)
             
-            self.assertEqual(post, response.context.get('post'))
+            self.assertEqual(post, response.context['post'])
         
